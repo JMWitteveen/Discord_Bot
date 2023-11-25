@@ -1,15 +1,17 @@
 import os
 import discord
-from dotenv import load_dotenv
 import random
+from dotenv import load_dotenv
+from discord.ext import commands
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 intents = discord.Intents.all()
-
 client = discord.Client(intents=intents)
+
+bot = commands.Bot(command_prefix='!')
 
 @client.event
 async def on_ready():
@@ -21,15 +23,14 @@ async def on_ready():
           f'{guild.name}(id: {guild.id})'
     )
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+@bot.command(name="roll", help='Rolls a 6-sided die and tells the user the result')
+async def roll_dice(ctx):
+    #if message.author == client.user:
+    #    return
     
-    if message.content == "!Roll":
-        diceroll = random.choice(range(1,7))
-        response = f"You rolled: {diceroll}"
-        await message.channel.send(response)
+    diceroll = random.choice(range(1,7))
+    response = f"You rolled: {diceroll}"
+    await ctx.send(response)
 
 
 
