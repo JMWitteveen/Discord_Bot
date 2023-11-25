@@ -3,7 +3,6 @@ import discord
 import random
 import pyjokes
 import json
-import requests
 
 from dotenv import load_dotenv
 from discord.ext import commands
