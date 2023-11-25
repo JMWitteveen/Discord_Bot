@@ -1,6 +1,8 @@
 import os
 import discord
 import random
+import pyjokes
+
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -21,7 +23,7 @@ async def on_ready():
           f'{guild.name}(id: {guild.id})'
     )
 
-@bot.command(name="roll", help='Rolls X amount of Y-sided dice')
+@bot.command(name="roll", help='Simulates rolling dice -- usage: !roll [AMOUNT_OF_DICE] [SIDES_PER_DIE]')
 async def roll_dice(ctx, n_dice: int, n_sides: int):
     if ctx.author == bot.user:
         return
@@ -35,6 +37,10 @@ async def roll_dice(ctx, n_dice: int, n_sides: int):
     print(f'User: {ctx.author}, has rolled: {', '.join(dice_rolls)}')
     await ctx.send(response)
 
-
+@bot.command(name='joke', help='Tells a joke -- useage: !joke}')
+async def tell_joke(ctx):
+        joke = pyjokes.get_joke(language='en',category='all')
+        print(f'User: {ctx.author}, has received this joke: {joke}')
+        await ctx.send(joke)
 
 bot.run(TOKEN)
