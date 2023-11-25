@@ -9,29 +9,32 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 intents = discord.Intents.all()
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents)
 
-bot = commands.Bot(command_prefix='!')
-
-@client.event
+@bot.event
 async def on_ready():
-    for guild in client.guilds:
+    for guild in bot.guilds:
         if guild.name == GUILD:
             break
     
-    print(f'{client.user} is connected to the following guild:\n'
+    print(f'{bot.user} is connected to the following guild:\n'
           f'{guild.name}(id: {guild.id})'
     )
 
-@bot.command(name="roll", help='Rolls a 6-sided die and tells the user the result')
-async def roll_dice(ctx):
-    #if message.author == client.user:
-    #    return
+@bot.command(name="roll", help='Rolls X amount of Y-sided dice')
+async def roll_dice(ctx, n_dice: int, n_sides: int):
+    if ctx.author == bot.user:
+        return
     
-    diceroll = random.choice(range(1,7))
-    response = f"You rolled: {diceroll}"
+    dice_rolls = [
+        str(random.choice(range(1, n_sides + 1)))
+        for _ in range(n_dice)
+    ]
+
+    response = 'You rolled: ' + ', '.join(dice_rolls)
+    print(f'User: {ctx.author}, has rolled: {', '.join(dice_rolls)}')
     await ctx.send(response)
 
 
 
-client.run(TOKEN)
+bot.run(TOKEN)
